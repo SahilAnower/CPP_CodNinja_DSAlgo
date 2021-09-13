@@ -1,0 +1,61 @@
+int pairSum(int *arr, int n, int num)
+{
+	//Write your code here
+    sort(arr,arr+n);
+    int i=0,j=n-1;
+    int count=0;
+    while(i<j){
+        if(arr[i]+arr[j]>num)
+            j--;
+        else if(arr[i]+arr[j]<num)
+            i++;
+        else{
+            if(arr[i]==arr[i+1] || arr[j]==arr[j-1]){
+                int count1=0,count2=0;
+                int t1=i,t2=j;
+                while(arr[i+1]==arr[i]){
+                    i++;
+                    // if duplicates are from i, we will count of them
+                    count1++;
+                    if(i==n-1)
+                        break;
+                }
+                while(arr[j-1]==arr[j]){
+                    j--;
+                    count2++;
+                    // if duplicates are from j, we will keep count of them
+                    if(j==0)
+                        break;
+                }
+                if(count1==count2 && arr[t1]==arr[t2]){
+                    while(count1>0){
+                        count+=count1;
+                        // in case of all duplicates between i and j, and at the start arr[i]==arr[j].
+                        count1--;
+                    }
+                }else if(count1==0 && count2!=0){
+                    count+=count2+1;
+                    i++;
+                    // if duplicates are present only from the first end.
+                    j--;
+                }else if(count1!=0 && count2==0){
+                    count+=count1+1;
+                    i++;
+                    // if duplicates are present only from the second end.
+                    j--;
+                }else{
+                    count+=(count1+1)*(count2+1);
+                    i++;
+                    // if duplicates are present from both ends, but arr[i]!=arr[j].
+                    j--;
+                }
+            }else{
+                count++;
+                i++;
+                // if no duplicates.
+                j--;
+            }
+        }
+    }
+    return count;
+}
