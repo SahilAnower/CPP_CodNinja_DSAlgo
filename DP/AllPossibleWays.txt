@@ -1,0 +1,20 @@
+#include <cmath>
+void getAllWays(int a,int b,int i,int &count){
+    if(a==0){
+        count++;
+        return;
+    }
+    if(a<=0)
+        return;
+    for(int k=i;pow(k,b)<=a;k++){
+        getAllWays(a-pow(k,b),b,k+1,count);
+    }
+}
+
+int getAllWays(int a, int b) {
+	// Write your code here
+    int i=1;
+    int count=0;
+    getAllWays(a,b,i,count);
+    return count;
+}
