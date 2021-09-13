@@ -1,0 +1,69 @@
+Return all codes - String
+Send Feedback
+Assume that the value of a = 1, b = 2, c = 3, ... , z = 26. You are given a numeric string S. Write a program to return the list of all possible codes that can be generated from the given string.
+Note : The order of codes are not important. And input string does not contain 0s.
+Input format :
+A numeric string
+Constraints :
+1 <= Length of String S <= 10
+Sample Input:
+1123
+Sample Output:
+aabc
+kbc
+alc
+aaw
+kw
+---------------------------------------------------------------------
+
+#include <string.h>
+using namespace std;
+
+char getCode(string input){
+    int size=input.size();
+    int in;
+    char out;
+    if(size==1){
+        in=input[0]-'0';
+    }else{
+        int in2=input[0]-'0';
+        int in3=input[1]-'0';
+        in=in2*10+in3;
+    }
+    if(in<=26){
+        out=in+'a'-1;
+    }
+    return out;
+}
+
+int getCodes(string input, string output[10000]) {
+    /*
+    You are given the input text and output string array. Find all possible codes and store in the output string array. Don’t print the codes.
+    Also, return the number of codes return to the output string. You do not need to print anything.
+    */
+    if(input.empty()){
+        output[0]="";
+        return 1;
+    }
+    string o1[1000];
+    string o2[1000];
+    int size1=0;
+    int size2=0;
+    char ch1=getCode(input.substr(0,1));
+    char ch2=getCode(input.substr(0,2));
+    
+    size1=getCodes(input.substr(1),o1);
+    if(input.size()>=2 && ch2!='\0'){
+        size2=getCodes(input.substr(2),o2);
+    }
+    for(int i=0;i<size1;i++){
+        output[i]=ch1+o1[i];
+    }
+    int k=0;
+    for(int i=size1;i<(size1+size2);i++){
+        output[i]=ch2+o2[k];
+        k++;
+    }
+    return (size1+size2);
+}
+

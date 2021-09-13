@@ -1,0 +1,34 @@
+int solve(string s, string v) {
+    // Write your code here
+    int ma=1005; // taking this as not infinite as it may cross the bounds when incremented by 1 downwards.
+    int m=s.size();
+    int n=v.size();
+    vector<vector<int>> dp(m+1,vector<int>(n+1));
+    for(int i=1;i<=m;i++){
+        dp[i][0]=1; // 1 as when the v string is empty and s is non-empty, it means the shortest string not present in v is of size.
+    }
+    for(int i=1;i<=n;i++){
+        dp[0][i]=ma; // maximum, as when the s string is empty, it means the length of shortest subsequence is maximum.
+    }
+    dp[0][0]=ma;
+    for(int i=1;i<=m;i++){
+        for(int j=1;j<=n;j++){
+            char ch=s[i-1];
+            int k;
+            for(k=j-1;k>=0;k--){
+                if(ch==v[k]) // here we look for the index from the backside at which index does the element lie, if it doesn't
+                    break;// lie, it means, k will be -1, and length of subsequence '1' we have found out.
+            }
+            if(k==-1)
+                dp[i][j]=1;
+            else{
+                dp[i][j]=min(dp[i-1][j],1+dp[i-1][k]); // we will be looking for minimum length just as in case of recursion we did.
+            }
+        }
+    }
+    if(dp[m][n]>=ma){
+        return -1;
+    }else{
+        return dp[m][n];
+    }
+}
