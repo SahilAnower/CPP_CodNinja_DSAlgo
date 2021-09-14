@@ -1,0 +1,116 @@
+#include <bits/stdc++.h>
+using namespace std;
+
+template <typename V>
+class MapNode{
+public:
+	string key;
+	V val;
+	MapNode* next;
+	MapNode(string key,V val){
+		this->key=key;
+		this->val=val;
+		next=NULL;
+	}
+	~MapNode(){
+		delete next;
+	}
+};
+
+class ourMap{
+	MapNode<V>** buckets;
+	int size;
+	int numBuckets;
+public:
+	ourMap(){
+		size=0;
+		numBuckets=5;
+		buckets=new MapNode<V>*[numBuckets];
+		for(int i=0;i<numBuckets;i++){
+			buckets[i]=NULL;
+		}
+	}
+	~ourMap(){
+		for(int i=0;i<numBuckets;i++){
+			delete numBuckets[i];
+		}
+		delete[] buckets;
+	}
+	int count(){
+		return size;
+	}
+private:
+	int getBucket(string key){
+		int coeff=1;
+		int hashCode=0;
+		for(int i=0;i<key.size();i++){
+			hashCode+=key[i]*coeff;
+			hashCode=hashCode%numBuckets;
+			coeff*=13;
+			coeff=coeff%numBuckets;
+		}
+		return hashCode%numBuckets;
+	}
+public:
+	void insert(string key,V val){
+		int bucketIndex=getBucket(key);
+		MapNode<V>* head=buckets[bucketIndex];
+		while(head!=NULL){
+			if(head->key==key){
+				head->key=val;
+				return;
+			}
+			head=head->next;
+		}
+		MapNode<V>* head=buckets[bucketIndex];
+		MapNode<V>* n=new MapNode<V>(key,val);
+		n->next=head;
+		head=n;
+		buckets[bucketIndex]=head;
+		size++;
+	}
+	
+	V remove(string key){
+		int bucketIndex=getBucket(key);
+		MapNode<V>* head=buckets[bucketIndex];
+		MapNode<V>* temp=head;
+		MapNode<V>* prev=NULL;
+		while(temp!=NULL){
+			if(temp->key==key && head==temp){
+				V v=head->val;
+				head=head->next;
+				buckets[bucketIndex]=head;
+				temp->next=NULL;
+				delete temp;
+				count--;
+				return v;
+			}else if(temp->key==key){
+				prev->next=temp->next;
+				V v=temp->val;
+				temp->next=NULL;
+				delete temp;
+				count--;
+				return v;
+			}else{
+				prev=temp;
+				temp=temp->next;
+			}
+		}
+		cout << "Element Not Found" << "\n";
+		return -1;
+	}
+	
+	V getValue(string key){
+		int bucketIndex=getBucket(key);
+		MapNode<V>* head=buckets[bucketIndex];
+		while(head!=NULL){
+			if(head->key==key){
+				return head->val;
+			}
+			head=head->next;
+		}
+		cout << "NOT Found" << "\n";
+		return -1;
+	}
+	
+};

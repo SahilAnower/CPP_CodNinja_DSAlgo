@@ -1,0 +1,90 @@
+#include <vector>
+
+class PriorityQueue {
+    vector<int> pq;
+    
+    void swapp(int a,int b){
+        int temp=pq[a];
+        pq[a]=pq[b];
+        pq[b]=temp;
+    }
+
+   public:
+    bool isEmpty() { 
+        return pq.size() == 0; 
+    }
+
+    int getSize() { 
+        return pq.size(); 
+    }
+
+    int getMin() {
+        if (isEmpty()) {
+            return 0;
+        }
+
+        return pq[0];
+    }
+
+    void insert(int element) {
+        pq.push_back(element);
+
+        int childIndex = pq.size() - 1;
+
+        while (childIndex > 0) {
+            int parentIndex = (childIndex - 1) / 2;
+
+            if (pq[childIndex] < pq[parentIndex]) {
+                int temp = pq[childIndex];
+                pq[childIndex] = pq[parentIndex];
+                pq[parentIndex] = temp;
+            } else {
+                break;
+            }
+
+            childIndex = parentIndex;
+        }
+    }
+
+    int removeMin() {
+        // Write your code here
+        if(pq.size()==0){
+            return -1;
+        }
+        int ans=pq[0];
+        pq[0]=pq[pq.size()-1];
+        pq.pop_back();
+        // Here we remove the top element of array as the one with min value, and put the last element in the array as the top
+        // and will look for it's children, if it is in correct position or not.
+        int lchild=1,rchild=2;
+        int curr=0;
+        while(lchild<pq.size() || rchild<pq.size()){
+            int minVal=INT_MAX;
+            int minIndex=0;
+            if(lchild<pq.size() && pq[lchild]<pq[curr]){
+                int flag=minVal;
+                minVal=min(minVal,pq[lchild]);
+                if(flag!=minVal)
+                    minIndex=lchild;
+            }
+            if(rchild<pq.size() && pq[rchild]<pq[curr] && pq[rchild]<pq[lchild]){
+                int flag=minVal;
+                minVal=min(minVal,pq[rchild]);
+                if(flag!=minVal)
+                    minIndex=rchild;
+            }
+            
+            // we are checking for the minimum of left and right child, for the replacement of the root or currrent element with it.
+            
+            if(minVal==INT_MAX)
+                break;
+            else{
+                swapp(curr,minIndex);
+                curr=minIndex;
+                lchild=curr*2+1;
+                rchild=curr*2+2;
+            }
+        }
+        return ans;
+    }
+};

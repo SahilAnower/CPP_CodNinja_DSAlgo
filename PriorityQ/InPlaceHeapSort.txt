@@ -1,0 +1,46 @@
+void swap(int &a,int &b){
+	int temp=a;
+    a=b;
+    b=temp;
+}
+
+void heapSort(int arr[], int n) {
+    // Write your code
+    int i=1;
+    for(i=1;i<n;i++){
+        int childIndex=i;
+        int parentIndex=(childIndex-1)/2;
+        while(childIndex>0){
+            if(arr[childIndex]<arr[parentIndex])
+            	swap(arr[childIndex],arr[parentIndex]);
+            else
+                break;
+            childIndex=parentIndex;
+            parentIndex=(childIndex-1)/2;
+        }
+    }
+    for(i=n-1;i>0;i--){
+        swap(arr[0],arr[i]);
+        int lchild=1;
+        int rchild=2;
+        int parent=0;
+        while(lchild<i){
+            int minIndex=parent;
+            if(arr[minIndex]>arr[lchild]){
+                minIndex=lchild;
+            }
+            if(rchild<i){
+                if(arr[minIndex]>arr[rchild])
+                    minIndex=rchild;
+            }
+            if(minIndex==parent)
+                break;
+            swap(arr[minIndex],arr[parent]);
+            parent=minIndex;
+            lchild=2*parent+1;
+            rchild=2*parent+2;
+        }
+    }
+}
+
+// 2 4 3 6 5 8
