@@ -1,0 +1,25 @@
+void reverseStack(stack<int> &input, stack<int> &extra) {
+    //Write your code here
+    // consider stack as -> 10 5 4 3 2 1(from top->bottom).
+    if(input.empty()){
+        return;
+    }
+    int top=input.top();
+    input.pop(); 
+    // we consider the top element out of the stack.
+    // stack-> 5 4 3 2 1
+    reverseStack(input,extra);
+    // considering this function gives our answer, new stack input now is-> 1 2 3 4 5
+    while(!input.empty()){
+        extra.push(input.top());
+        input.pop();
+    }
+    // emptying the input to extra and pushing the taken out element at the bottom, to maintain the reverse order.
+    // stack now- >  10
+    input.push(top);
+    while(!extra.empty()){
+        input.push(extra.top());
+        extra.pop();
+    } 
+    // stack now-> 1 2 3 4 5 10
+}
