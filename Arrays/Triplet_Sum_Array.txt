@@ -4,54 +4,54 @@ int tripletSum(int *arr, int n, int num)
     if(n<3)
         return 0;
     sort(arr,arr+n);
-    int i=0,j=0,k=0;
-    int count=0;
+    int i=0,j=0,k=0; // all 3 iterators for triplet answer
+    int count=0; // our final answer
     while(i<n-2){
         int s=num-arr[i];
-        j=i+1;
-        k=n-1;
+        j=i+1; // j starts one ahead i
+        k=n-1; // k starts at the end of array
         while(j<k){
             if(arr[j]+arr[k]<s){
                 j++;
             }else if(arr[j]+arr[k]>s){
                 k--;
             }else{
-                if(arr[j]==arr[j+1] || arr[k]==arr[k-1] && (j+1)!=k){
+                if(arr[j]==arr[j+1] || arr[k]==arr[k-1] && (j+1)!=k){ // if any duplicate occurs on any side and only if arr[j+1]!=arr[k]
                 	int t1=j,t2=k;
                     int count1=0,count2=0;
                	 	while(arr[j]==arr[j+1]){
                     	j++;
-                    	count1++;
+                    	count1++; // counting the number of duplicates left
                         if(j==n-1)
                             break;
                 	}
                     while(arr[k]==arr[k-1]){
                         k--;
-                        count2++;
+                        count2++;// counting the number of duplicates right
                          if(k==i+1)
                             break;
                     }
                     if(count1==count2 && arr[t1]==arr[t2]){
                         while(count1>0){
-                            count+=count1;
+                            count+=count1; // if all duplicates between j and k.
                             count1--;
                         }
                     }else if(count1==0 && count2!=0){
                         count+=count2+1;
-                        j++;
+                        j++; // if duplicates are there only from right hand side.
                         k--;
                     }else if(count2==0 && count1!=0){
-                        count+=count1+1;
+                        count+=count1+1;  // if duplicates are there only from left hand side.
                         j++;
                         k--;
                     }else{
-                        count+=(count1+1)*(count2+1);
+                        count+=(count1+1)*(count2+1); // if duplicates from both sides llike-> 1 2 2 3 3 3, 6
                         j++;
                         k--;
                     }
                 }else{
                     count++;
-                    j++;
+                    j++; // otherwise if no duplicates.
                     k--;
                     continue;
                 }
