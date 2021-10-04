@@ -1,0 +1,113 @@
+SUDOKU SOLVER
+Send Feedback
+Coding Ninjas has provided you a 9*9 sudoku board. The board contains non zero and zero values. Non zero values lie in the range: [1, 9]. Cells with zero value indicate that the particular cell is empty and can be replaced by non zero values.
+You need to find out whether the sudoku board can be solved. If the sudoku board can be solved, then print true, otherwise print false.
+Input Format:
+There are nine lines in input. Each of the nine lines contain nine space separated integers. These nine lines represent the sudoku board.
+Output Format:
+The first and only line of output contains boolean value, either true or false, as described in problem statement.
+Constraints:
+The cell values lie in the range: [0, 9]
+Time Limit: 1 second 
+Note:
+Input are given in a way that backtracking solution will work in the provided time limit.
+Sample Input 1:
+9 0 0 0 2 0 7 5 0 
+6 0 0 0 5 0 0 4 0 
+0 2 0 4 0 0 0 1 0 
+2 0 8 0 0 0 0 0 0 
+0 7 0 5 0 9 0 6 0 
+0 0 0 0 0 0 4 0 1 
+0 1 0 0 0 5 0 8 0 
+0 9 0 0 7 0 0 0 4 
+0 8 2 0 4 0 0 0 6
+Sample Output 1:
+true
+
+----------------------------------------------------------------------------------------------------------------------------------------------------
+
+#include<bits/stdc++.h>
+#define N 9
+using namespace std;
+
+bool search(int** arr,int &r,int &c){
+    for(int i=0;i<N;i++){
+        for(int j=0;j<N;j++){ // searching for empty place given as zero.
+            if(arr[i][j]==0){
+                r=i;
+                c=j;
+                return true;
+            }
+        }
+    }
+    return false;
+}
+
+bool isValidRow(int** arr,int r,int value){
+    for(int i=0;i<N;i++){
+        if(arr[r][i]==value)
+            return false;
+    }
+    return true;
+}
+
+bool isValidColumn(int** arr,int c,int value){
+    for(int i=0;i<N;i++){
+        if(arr[i][c]==value)
+            return false;
+    }
+    return true;
+}
+
+bool isValidGrid(int** arr,int r,int c,int value){ // Most important check, of whether element present in current 3*3 grid
+    // or not. For checking it, we have to get the rowStart and clstart value, of that grid. For example, if r is 4 and 
+    // c is 3, then, 
+    int rowStart=r-(r%3); // =>4-4%3->3
+    int colStart=c-(c%3); // =>3-3%3-> 3
+    for(int i=rowStart;i<rowStart+3;i++){ // 3->5 (including 3)
+        for(int j=colStart;j<colStart+3;j++){ // 3->5 ((including 3)
+            if(arr[i][j]==value)
+                return false;
+        }
+    }
+    return true;
+}
+
+bool isValid(int **arr,int r,int c,int value){
+    if(isValidRow(arr,r,value) && isValidColumn(arr,c,value) && isValidGrid(arr,r,c,value))
+        return true;
+    else
+        return false;
+}
+
+bool isSolve(int** &arr){
+    int r,c;
+    if(!search(arr,r,c))
+        return true;
+    
+        for(int i=1;i<=9;i++){
+            if(isValid(arr,r,c,i)){
+                arr[r][c]=i;
+                if(isSolve(arr))
+                    return true;
+                arr[r][c]=0; // resetting it to zero, for furhter numbers to aply there.
+            }
+        }
+    return false;
+}
+
+int main(){
+    int** arr=new int*[N];
+    for(int i=0;i<N;i++){
+        arr[i]=new int[N];
+        for(int j=0;j<N;j++){
+            cin >> arr[i][j];
+        }
+    }
+    if(isSolve(arr))
+        cout << "true" << endl;
+    else
+        cout << "false" << endl;
+    // write your code here
+    return 0;
+}

@@ -1,0 +1,59 @@
+RETURN KEYPAD CODE
+Send Feedback
+Given an integer n, using phone keypad find out all the possible strings that can be made using digits of input n.
+Return empty string for numbers 0 and 1.
+Note : 1. The order of strings are not important.
+2. Input and output has already been managed for you. You just have to populate the output array and return the count of elements populated in the output array.
+Input Format :
+Integer n
+Output Format :
+All possible strings in different lines
+Constraints :
+1 <= n <= 10^6
+Sample Input:
+23
+Sample Output:
+ad
+ae
+af
+bd
+be
+bf
+cd
+ce
+cf
+
+-----------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+#include <string>
+using namespace std;
+
+int helper(int num,string output[],string options[]){
+    if(num==0){
+        output[0]=""; // if num comes as zero, we just initialize the starting value for any further strings to be "".
+        return 1;
+    }
+    int ldigit=num%10;
+    int rdigit=num/10;
+    string smallOut[500];
+    int ssize=helper(rdigit,smallOut,options); // we recurse here for the rest front of the no. to another function
+    // in which smallOut will be set with our values, and ssize will be the size of that smallout array.
+    string l=options[ldigit]; // last no. string is stored here.
+    int count=0;
+    for(int i=0;i<l.size();i++){
+        for(int j=0;j<ssize;j++){
+            output[count]=smallOut[j]+l[i]; // for each string in smallout, we add last digit's string each character to each 
+            // smallOut strings. and accordingly add up our count.
+            count++;
+        }
+    }
+    return count;
+}
+
+int keypad(int num, string output[]){
+    /* Insert all the possible combinations of the integer number into the output string array. You do not need to
+    print anything, just return the number of strings inserted into the array.
+    */
+    string options[]={"","","abc","def","ghi","jkl","mno","pqrs","tuv","wxyz"};
+    return helper(num,output,options);
+}

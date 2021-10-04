@@ -1,0 +1,61 @@
+MERGE SORT CODE.
+
+void merge(int input[],int si,int li,int size){
+    int copy[size]; // size of the temporary array of li-si+1.
+    int mid=(si+li)/2;
+    int i=si;
+    int j=mid+1;
+    int count=0;
+    while(i<=mid && j<=li){
+        if(input[i]<input[j]){
+            copy[count]=input[i];
+            i++;
+            count++;
+        }else if(input[j]<input[i]){
+            copy[count]=input[j];
+            j++;
+            count++;
+        }else{ // if both are similar i and j, copy them over as it is over successive indices in resultant array,
+            // and increase the counter of resultant array by 2.
+            copy[count]=input[i];
+            copy[count+1]=input[j];
+            count=count+2;
+            i++;
+            j++;
+        }
+    }
+    // if any of left or right half-arrays doesn't hit their ends, we just look up add them to the resultant
+        while(i<=mid){
+            copy[count]=input[i];
+            i++;
+            count++;
+        }
+        while(j<=li){
+            copy[count]=input[j];
+            j++;
+            count++;
+        }
+    int it=0; // iterate over the resultant array, and put them according to the indexes from si to li.
+    while(it<size && si<=li){
+        input[si]=copy[it];
+        it++;
+        si++;
+    }
+}
+
+void helper(int input[], int si, int li){
+    int mid=(si+li)/2;
+    if(si>=li){
+        return;
+    }
+	helper(input,si,mid);
+    helper(input,mid+1,li);
+    merge(input,si,li,(li-si)+1);
+}
+
+void mergeSort(int input[], int size){
+	// Write your code here
+    int si=0;
+    int li=size-1;
+    helper(input,si,li);
+}

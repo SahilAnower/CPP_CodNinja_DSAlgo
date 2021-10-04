@@ -1,0 +1,48 @@
+QUICK SORT CODE
+
+------------------------------------------------------------------------------------------------------------------------------------------------------
+int partition(int input[],int si,int li){
+    int pi=si;
+    int count=0;
+    for(int i=si+1;i<=li;i++){
+        if(input[i]<input[pi])
+            count++; // Here we are setting our considered pivot(starting point) to it's correct position in the sorted array, by 
+        // taking count of the elements smaller than it and shifting it by that many elements.
+    }
+    pi=pi+count;
+    swap(input[pi],input[si]); // swapping the elements at new pivot point and si.
+    int i=si,j=li;
+    while(i<pi && j>pi){
+        if(input[i]<=input[pi]){ // if left element is less than pivot, simply i++. 
+            i++;
+        }else if(input[j]>input[pi]){
+            j--; // if right element greater than pivot, simply j--.
+        }else{
+            swap(input[i],input[j]); // if both doesn'tt satisfy, it means both i and j elements need to be swapped.
+            // as both are at wrong positions.
+            i++;
+            j--;
+        }
+    }
+    return pi;
+}
+
+void helper(int input[],int si,int li){
+    if(si>=li){
+        return;
+    }
+    int pi=partition(input,si,li);
+    helper(input,si,pi-1);
+    helper(input,pi+1,end);
+}
+
+void quickSort(int input[], int size) {
+  /* Don't write main().
+     Don't read input, it is passed as function argument.
+     Change in the given array itself.
+     Taking input and printing output is handled automatically.
+  */
+	int si=0;
+    int ei=size-1;
+    helper(input,si,ei);
+}

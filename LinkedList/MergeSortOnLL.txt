@@ -1,0 +1,93 @@
+MERGE SORT ON LL
+
+
+/****************************************************************
+ 
+    Following is the class structure of the Node class:
+
+        class Node
+        {
+        public:
+	        int data;
+	        Node *next;
+	        Node(int data)
+	        {
+		        this->data = data;
+		        this->next = NULL;
+	        }
+        };
+
+*****************************************************************/
+
+Node* midPoint(Node* head){
+    if(head==NULL){
+        return head;
+    }
+    Node* slow=head;
+    Node* fast=head->next;
+    while(fast!=NULL && fast->next!=NULL){
+        slow=slow->next;
+        fast=fast->next->next;
+    }
+    return slow;
+}
+
+Node* merge(Node* head1,Node* head2){
+    if(head1==NULL && head2==NULL){
+        return head1;
+    }
+    if(head1==NULL){
+        return head2;
+    }
+    if(head2==NULL){
+        return head1;
+    }
+    Node* fh=NULL;
+    Node* ft=NULL;
+    Node* temp1=head1;
+    Node* temp2=head2;
+    if(temp1->data<temp2->data){
+        fh=temp1;
+        ft=temp1;
+        temp1=temp1->next;
+    }else{
+        fh=temp2;
+        ft=temp2;
+        temp2=temp2->next;
+    }
+    while(temp1!=NULL && temp2!=NULL){
+        if(temp1->data<temp2->data){
+        	ft->next=temp1;
+            ft=temp1;
+            temp1=temp1->next;
+    	}else{
+        	ft->next=temp2;
+            ft=temp2;
+        	temp2=temp2->next;
+    	}
+    }
+    if(temp1!=NULL || temp2!=NULL){
+        if(temp1!=NULL){
+            ft->next=temp1;
+        }else{
+            ft->next=temp2;
+        }
+    }
+    return fh;
+}
+
+Node *mergeSort(Node *head)
+{
+	//Write your code here
+    if(head==NULL || head->next==NULL){
+        return head;
+    }
+    Node* mid=midPoint(head); // finding midpoint through tortoise and hare pointers.
+    Node* head1=head; // head1 is the head of one ll
+    Node* head2=mid->next; // head2 is the head of second ll
+    mid->next=NULL; // we disconnect the two lls
+    head1=mergeSort(head1); // call recursion for sorted first ll
+    head2=mergeSort(head2); // call recursion for sorted second ll
+    Node* nHead=merge(head1,head2); // now call merge upon those 2 lls
+    return nHead;
+}
